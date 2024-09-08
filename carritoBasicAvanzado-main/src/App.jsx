@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
+import React, { useState, useEffect } from 'react'; // Importar useEffect
+import { Routes, Route, useNavigate, useLocation } from 'react-router-dom'; // Importar useLocation
 import Header from './components/Header';
 import ProductList from './components/ProductList';
 import CartMenu from './components/CartMenu';
@@ -8,6 +8,13 @@ import SalesReport from './components/SalesReport';
 import InvoiceForm from './components/InvoiceForm';
 import InvoicePDF from './components/InvoicePDF';
 import axios from 'axios'; // Importar axios
+import Register from './components/Register';
+import Login from './components/Login';
+import ManageProducts from './components/ManageProducts';
+import Pedidos from './components/Pedidos';
+import ManageOrders from './components/ManageOrders'; // Importar componente de gestión de pedidos
+import UpdateUser from './components/UpdateUser'; // Importar el componente de actualización de usuario
+
 
 const initialProducts = [];
 
@@ -40,7 +47,7 @@ const mapProductData = (product) => {
 };
 
 const App = () => {
-  const [products] = useState(initialProducts, setProducts);
+  const [products, setProducts] = useState(initialProducts);
   const [salesData] = useState(initialSalesData);
   const [cartItems, setCartItems] = useState([]);
   const [showCartMenu, setShowCartMenu] = useState(false);
@@ -65,6 +72,7 @@ const App = () => {
       fetchProducts();
     }
   }, [location.pathname]);
+
 
   const handleAddToCart = (product, quantity) => {
     const existingItem = cartItems.find(item => item.product.id === product.id);
@@ -105,6 +113,11 @@ const App = () => {
     setPaymentInfo(info);
   };
 
+  const PrivateRoute = ({ children }) => {
+    const role = localStorage.getItem('role');
+    return role === 'admin' ? children : <div>No tienes acceso a esta página</div>;
+  };
+
   return (
     <div className="app">
   
@@ -129,6 +142,13 @@ const App = () => {
         <Route path="/sales-report" element={<SalesReport data={salesData} />} />
         <Route path="/invoice" element={<InvoiceForm cartItems={cartItems} />} />
         <Route path="/invoice-pdf" element={<InvoicePDF />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/manage-products" element={<PrivateRoute><ManageProducts /></PrivateRoute>} />
+        <Route path="/pedidos" element={<Pedidos />} /> {/* Nueva ruta para el componente Pedidos */}
+        <Route path="/manage-orders" element={<PrivateRoute><ManageOrders /></PrivateRoute>} /> {/* Ruta para gestionar pedidos */}
+        <Route path="/update-user" element={<UpdateUser />} /> {/* Nueva ruta para actualizar el usuario */}
+
         
       </Routes>
 
