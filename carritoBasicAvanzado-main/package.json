@@ -11,6 +11,8 @@
   },
   "dependencies": {
     "@formkit/auto-animate": "^0.8.2",
+    "axios": "^1.7.7",
+    "cors": "^2.8.5",
     "file-saver": "^2.0.5",
     "jspdf": "^2.5.1",
     "jspdf-autotable": "^3.8.2",
